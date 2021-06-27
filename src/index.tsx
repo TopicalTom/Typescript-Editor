@@ -4,14 +4,13 @@ import { Provider } from 'react-redux';
 import { store } from './state';
 
 // Components
-//import CodeCell from './components/CodeCell';
-import TextEditor from './components/TextEditor';
+import CellList from './components/CellList';
 
 const App = () => {
     return (
         <Provider store={store}>
             <div>
-                <TextEditor />
+                <CellList />
             </div>
         </Provider>
     );
