@@ -1,0 +1,10 @@
+.preview {
+    position: relative;
+    height: 100%;
+
+    & > iframe {
+        height: 100%;
+        background-color: #FFF;
+        pointer-events: none;
+    }
+}
