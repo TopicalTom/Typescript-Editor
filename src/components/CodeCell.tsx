@@ -10,6 +10,7 @@ import Resizable from './Resizeable';
 
 const CodeCell = () => {
     const [ code, setCode ] = useState('');
+    const [ err, setErr ] = useState('');
     const [ input, setInput ] = useState('');
 
     // Takes editor code and transpiles it for preview window
@@ -18,14 +19,15 @@ const CodeCell = () => {
         // Transpiles code on input pause
         const timer = setTimeout(async () => {
             const output = await bundle(input);
-            setCode(output);
+            setCode(output.code);
+            setErr(output.err);
         }, 800);
 
         // Cancels action on new input
         return () => {
             clearTimeout(timer);
         };
-    }, [input])
+    }, [input]);
 
     return (
         <Resizable direction="vertical">
@@ -36,7 +38,7 @@ const CodeCell = () => {
                         onChange={(value) => setInput(value)}
                     />
                 </Resizable>
-                <CodePreview code={code} />
+                <CodePreview code={code} err={err} />
             </div>
         </Resizable>
     );
