@@ -30,9 +30,14 @@ const html = `
 const CodePreview: FC<PreviewProps> = ({ code }) => {
     const iframe = useRef<any>(null);
 
+    // Clears preview and posts new code
     useEffect(() => {
         iframe.current.srcdoc = html;
-        iframe.current.contentWindow.postMessage(code, '*');
+
+        // Protects against flashing code
+        setTimeout(() => {
+            iframe.current.contentWindow.postMessage(code, '*');
+        }, 50);
     }, []);
 
     return (

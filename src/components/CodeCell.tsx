@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // Bundler
 import bundle from '../bundler';
@@ -13,10 +13,19 @@ const CodeCell = () => {
     const [ input, setInput ] = useState('');
 
     // Takes editor code and transpiles it for preview window
-    const onClick = async () => {
-        const output = await bundle(input);
-        setCode(output);
-    };
+    useEffect(() => {
+
+        // Transpiles code on input pause
+        const timer = setTimeout(async () => {
+            const output = await bundle(input);
+            setCode(output);
+        }, 800);
+
+        // Cancels action on new input
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [input])
 
     return (
         <Resizable direction="vertical">
