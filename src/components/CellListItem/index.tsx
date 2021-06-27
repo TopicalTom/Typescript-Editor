@@ -1,7 +1,11 @@
+import './CellListItem.scss';
 import { FC } from 'react';
 import { Cell } from '../../state';
 import CodeCell from '../CodeCell';
 import TextEditor from '../TextEditor';
+
+// Components
+import ActionBar from '../ActionBar';
 
 interface CellListItemProps {
     cell: Cell
@@ -9,10 +13,18 @@ interface CellListItemProps {
 
 const CellListItem: FC<CellListItemProps> = ({ cell }) => {
     return (
-        <div>
+        <div className="cell-list-item">
             {cell && cell.type === 'code' 
-                ?   <CodeCell cell={cell} />
-                :   <TextEditor cell={cell} />
+                ?   <>
+                        <div className="action-bar-wrapper">
+                            <ActionBar id={cell.id} />
+                        </div>
+                        <CodeCell cell={cell} />
+                    </>
+                :   <>
+                        <ActionBar id={cell.id} />
+                        <TextEditor cell={cell} />
+                    </>
             }
         </div>
     );
