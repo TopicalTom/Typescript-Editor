@@ -6,22 +6,22 @@ import { useActions } from '../../hooks/use-actions';
 import AddButton from '../AddButton';
 
 interface AddCellProps {
-    nextCellId: string | null;
+    previousCellId: string | null;
     forceVisible?: boolean;
 };
 
-const AddCell: FC<AddCellProps> = ({ nextCellId, forceVisible }) => {
-    const { insertCellBefore } = useActions();
+const AddCell: FC<AddCellProps> = ({ previousCellId, forceVisible }) => {
+    const { insertCellAfter } = useActions();
 
     return (
         <div className={`add-cell ${forceVisible && 'force-visible'}`}>
             <div className="add-cell-container">
                 <AddButton 
-                    callback={() => insertCellBefore(nextCellId, 'code')}
+                    callback={() => insertCellAfter(previousCellId, 'code')}
                     label="Code"
                 />
                 <AddButton 
-                    callback={() => insertCellBefore(nextCellId, 'text')}
+                    callback={() => insertCellAfter(previousCellId, 'text')}
                     label="Text"
                 />
             </div>

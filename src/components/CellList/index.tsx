@@ -10,16 +10,16 @@ const CellList: FC = () => {
 
     return (
         <div>
-            {cells.map(cell => 
-                <Fragment key={cell.id}>
-                    <AddCell nextCellId={cell.id} />
-                    <CellListItem cell={cell} />
-                </Fragment>
-            )}
             <AddCell 
                 forceVisible={cells.length === 0} 
-                nextCellId={null} 
+                previousCellId={null} 
             />
+            {cells.map(cell => 
+                <Fragment key={cell.id}>
+                    <CellListItem cell={cell} />
+                    <AddCell previousCellId={cell.id} />
+                </Fragment>
+            )}
         </div>
     );
 };
