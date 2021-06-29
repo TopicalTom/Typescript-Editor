@@ -3,6 +3,7 @@ import { FC, useEffect } from 'react';
 import { Cell } from '../../state';
 import { useActions } from '../../hooks/use-actions';
 import { useTypedSelector } from '../../hooks/use-types-selector';
+import { useCumulativeCode } from '../../hooks/use-cumulative-code';
 
 // Components
 import CodeEditor from '../CodeEditor';
@@ -17,36 +18,20 @@ interface CodeCellProps {
 const CodeCell: FC<CodeCellProps> = ({ cell }) => {
     const { updateCell, createBundle } = useActions();
     const bundle = useTypedSelector((state) => state.bundles[cell.id]);
-    const cumulativeCode = useTypedSelector((state) => {
-        const { data, order } = state.cells;
-        const orderedCells = order.map(id => data[id]);
-
-        const cumulativeCode = [];
-        for (let c of orderedCells) {
-            if (c.type === 'code') {
-                cumulativeCode.push(c.content);
-            };
-
-            // Stop after current cell
-            if (c.id === cell.id) {
-                break;
-            };
-        };
-        return cumulativeCode;
-    });
+    const cumulativeCode = useCumulativeCode(cell.id);
 
     // Takes editor code and transpiles it for preview window
     useEffect(() => {
 
         // Creates initial bundle
         if(!bundle) {
-            createBundle(cell.id, cumulativeCode.join('\n'));
+            createBundle(cell.id, cumulativeCode);
             return;
         };
 
         // Transpiles new code on input pause
         const timer = setTimeout(async () => {
-            createBundle(cell.id, cumulativeCode.join('\n'));
+            createBundle(cell.id, cumulativeCode);
         }, 800);
 
         // Cancels action on new input
@@ -54,7 +39,7 @@ const CodeCell: FC<CodeCellProps> = ({ cell }) => {
             clearTimeout(timer);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cell.id, cumulativeCode.join('\n'), createBundle]);
+    }, [cell.id, cumulativeCode, createBundle]);
 
     return (
         <Resizable direction="vertical">
